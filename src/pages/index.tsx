@@ -3,28 +3,29 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 //React
-import { useContext, FormEvent } from 'react';
+import { useContext, FormEvent, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 // Imagem
 import Img from '../../public/imglogincfit.png';
 
 // Icones
-import { IonIcon } from '@ionic/react';
 //bug aq
-
-import { keyOutline, personCircleOutline } from 'ionicons/icons';
+ 
 
 
 
 export default function Home() {
   const {signIn} = useContext(AuthContext)
-  async function handleLogin(event : FormEvent) {
-    event.preventDefault();
+  const [email, setEmail] = useState('')
+  const [password,setPassword] = useState('')
+  async function handleLogin(event: FormEvent) {
+    event.preventDefault()
+    console.log('teste')
     let data = {
-      email: "teste@gmail.com",
-      password: "123"
+      email,
+      password
     }
-    signIn(data)
+    await signIn(data)
   }
   return (
     <>
@@ -38,23 +39,23 @@ export default function Home() {
         </div>
         {/* Right: Login Form */}
         <div className="lg:p-36 md:p-52 sm:p-20 p-8 w-full h-full lg:w-1/2">
-          <h1 className="text-2xl font-semibold mb-4">Login</h1>
-          <form action="#" method="POST" onSubmit={handleLogin}>
+          <h1 className="text-2xl font-semibold my-32 text-center">Aqui vai a logo da empresa</h1>
+          <form  onSubmit={handleLogin}>
             {/* Username Input */}
             <div className="flex items-center text-lg mb-6 md:mb-8">
-              <IonIcon icon={personCircleOutline} slot="start" className='absolute ml-3' style={{ color: 'purple', fontSize: '20px' }} />
               <input
                 type="email"
-                id="password"
-                name="password"
+                id="email"
+                name="email"
                 className="w-full border border-gray-300 rounded-md pl-12 py-2 px-3 focus:outline-none focus:border-cfit_purple"
                 autoComplete="off"
                 placeholder="Usuario"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             {/* Password Input */}
             <div className="flex items-center text-lg mb-6 md:mb-8">
-              <IonIcon icon={keyOutline} slot="start" className='absolute ml-3' style={{ color: 'purple', fontSize: '20px' }} />
               <input
                 type="password"
                 id="password"
@@ -62,6 +63,8 @@ export default function Home() {
                 className="w-full border border-gray-300 rounded-md pl-12 py-2 px-3 focus:outline-none focus:border-cfit_purple"
                 autoComplete="off"
                 placeholder="Senha"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             {/* Remember Me Checkbox */}
@@ -78,11 +81,10 @@ export default function Home() {
               </a>
             </div>
             {/* Login Button */}
-              <Link href="/dashboard">
                 <button type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md py-2 px-4 w-full"> 
                 <a >Login</a>
                 </button>
-              </Link>
+
           </form>
         </div>
       </div>

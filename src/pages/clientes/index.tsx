@@ -13,7 +13,7 @@ import Img from '../../../public/imglogincfit.png';
 
 //Components
 import Sidebar from '../../components/menu/sidebar';
-import Top from '../../components/top/dashboard/top';
+import Top from '../../components/top/clientes/top';
 
 
 export default function Dashboard() {
@@ -21,7 +21,7 @@ export default function Dashboard() {
   return (
     <>
       <Head>
-        <title>Agendamentos - Clinica Cfit</title>
+        <title>Clientes Clinica Cfit</title>
       </Head>
       <div className='flex'>
         <Sidebar/>
@@ -34,7 +34,7 @@ export default function Dashboard() {
           <div className="my-2 flex items-center justify-between">
             <div>
               <button type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md py-2 px-4">
-                <a>Agendar</a>
+                <a>Cadastrar</a>
               </button>
             </div>
             <div className="relative">
@@ -59,16 +59,16 @@ export default function Dashboard() {
                         Cliente
                       </th>
                       <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Serviço
+                        N° de Agendamentos
                       </th>
                       <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Contato
                       </th>
                       <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Data
+                        Data do último agendamento
                       </th>
                       <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Ida Conf
+                        Consulta Realizada
                       </th>
                       <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Detalhes
@@ -88,13 +88,13 @@ export default function Dashboard() {
                         </div>
                       </td>
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">Limpeza de Pele</p>
+                        <p className="text-gray-900 whitespace-no-wrap">2/10</p>
                       </td>
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">(00)9.9999-9999</p>
                       </td>
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">14/11/2023 11:00</p>
+                        <p className="text-gray-900 whitespace-no-wrap">10/10/2023 11:00</p>
                       </td>
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <span className="relative inline-block px-3 py-1 font-semibold text-white leading-tight">
@@ -121,7 +121,7 @@ export default function Dashboard() {
                         </div>
                       </td>
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">Limpeza de Pele</p>
+                        <p className="text-gray-900 whitespace-no-wrap">3/5</p>
                       </td>
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p className="text-gray-900 whitespace-no-wrap">(00)9.9999-9999</p>
@@ -148,6 +148,7 @@ export default function Dashboard() {
                 </table>
               </div>
             </div>
+            
           </div>
         </div>
       </div>
