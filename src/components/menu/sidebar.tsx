@@ -1,37 +1,43 @@
 // SidebarLayout.js
-import { useState } from 'react';
+import { useContext } from 'react';
 import Image from 'next/image';
 import Img from '../../../public/avatarfigma.png';
 import Link from 'next/link';
+import { useState } from 'react';
+import { AuthContext } from '../../contexts/AuthContext'; // Importe o AuthContext
+
 const Sidebar = () => {
   const [sidenav, setSidenav] = useState(true);
+  const { user } = useContext(AuthContext); // Consuma o contexto AuthContext
+console.log(user)
 
   return (
     <body className="font-poppins antialiased">
-    <div
-      id="view"
-      className="h-full w-auto flex flex-row"
-      x-data="{ sidenav: true }"
-    >
-     
       <div
-        id="sidebar"
-        className="bg-white h-screen md:block shadow-xl px-3 w-30 md:w-60 lg:w-60 overflow-x-hidden transition-transform duration-300 ease-in-out"
-        x-show="sidenav"
+        id="view"
+        className="h-full w-auto flex flex-row"
+        x-data="{ sidenav: true }"
       >
-        <div className="space-y-6 md:space-y-5 mt-10">
-         
-          <div id="profile" className="space-y-3 flex ml-2">
-            <Image src={Img} className="w-10 md:w-16 rounded-full mx-auto "/>
-            <div>
-              <h2 className="font-medium text-xs md:text-sm text-left ml-2 text-cfit_purple">
-                Fernanda
-              </h2>
-              <p className="text-xs text-gray-500 text-left ml-2">fê@gmail.com</p>
+        <div
+          id="sidebar"
+          className="bg-white h-screen md:block shadow-xl px-3 w-30 md:w-60 lg:w-60 overflow-x-hidden transition-transform duration-300 ease-in-out"
+          x-show="sidenav"
+        >
+          <div className="space-y-6 md:space-y-5 mt-10">
+            <div id="profile" className="space-y-2 flex ml-2">
+              <Image src={Img} className="w-10 md:w-16 rounded-full mx-auto " />
+              <div>
+                <h2 className="font-medium text-xs md:text-sm text-left ml-2 text-cfit_purple">
+                  Administrador
+                </h2>
+                <p className="text-xs text-black text-left ml-2">
+                  {user.email} {/* Use o email do usuário do contexto */}
+                </p>
+              </div>
             </div>
-          </div>
-          <div className='h-0.5 w-full bg-gray-200'></div>
-          <div id="menu" className="flex flex-col space-y-1">
+            <div className='h-0.5 w-full bg-gray-200'></div>
+           
+ <div id="menu" className="flex flex-col space-y-1">
             {/* menu */}
           <Link href="/dashboard">
             <a className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-cfit_purple hover:text-white hover:text-base rounded-md transition duration-150 ease-in-out">                
@@ -59,11 +65,10 @@ const Sidebar = () => {
             </a>
           </Link>
           </div>
+          </div>
         </div>
       </div>
-     
-    </div>
-  </body>
+    </body>
   );
 };
 

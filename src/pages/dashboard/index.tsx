@@ -4,20 +4,68 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 //React
-import { useContext, FormEvent, useState } from 'react';
+import { useContext, FormEvent, useState, useEffect } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 // Imagem
 import Img from '../../../public/imglogincfit.png';
 import { format } from 'date-fns';
 
-// Icones
+// Modal
+import Agendar from '../../components/modals/agendar/agendar';
 
 //Components
 import Sidebar from '../../components/menu/sidebar';
 import Top from '../../components/top/dashboard/top';
 
 import axios from 'axios'
-export default function Dashboard({ informacoes }) {
+
+
+
+export default function Dashboard({servicos}) {
+    const [openModal, setOpenModal] = useState(false)
+
+    const [itens, setItens] = useState([])
+    const [itensPerPage, setItensPerPage] = useState(5)
+    const [currentPage, setCurrentPage] = useState(0)
+
+    const pages = Math.ceil(itens.length / itensPerPage)
+    const startIndex = currentPage * itensPerPage;
+    const endIndex = startIndex + itensPerPage;
+    const currentItens = itens.slice(startIndex, endIndex)
+    const [filtro, setFiltro] = useState(''); // Estado para armazenar o valor selecionado no filtro
+
+    // Função para lidar com a mudança no valor do filtro
+    const handleFiltroChange = (event) => {
+      setFiltro(event.target.value);
+    };
+  
+    // Filtrar os itens com base no valor do filtro
+    const itensFiltrados = currentItens.filter((agendamento) => {
+      if (filtro === '' || agendamento.Servico.nomeServico === filtro) {
+        return true;
+      }
+      return false;
+    });
+    useEffect(()=>{
+      const fechData = async () => {
+        const result = await fetch('http://localhost:8080/informacoes')
+          .then(response => response.json())
+          .then(data => data)
+        setItens(result)
+      }
+      fechData()
+    }, [])
+    const goToPage = (page) => {
+      setCurrentPage(page);
+    };
+  
+    const goPrevPage = () => {
+      setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+    };
+  
+    const goNextPage = () => {
+      setCurrentPage((prevPage) => Math.min(prevPage + 1, pages - 1));
+    };
 
   return (
     <>
@@ -32,19 +80,31 @@ export default function Dashboard({ informacoes }) {
             <div className="antialiased font-sans">
               <div className="container mx-auto px-4 sm:px-8 ">
                 <div className="py-8  overflow-x-hidden overflow-y-hidden">
-                  <div className="my-2 flex items-center justify-between">
+                  <div className="my-2 flex items-center justify-between text-black">
+                  <Agendar isOpen={openModal}/>
+
                     <div>
-                      <button type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md py-2 px-4">
+                      <button onClick={()=>setOpenModal(true)} type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md py-2 px-4">
                         <a>Agendar</a>
+                      </button>
+                      <button onClick={()=>setOpenModal(false)} type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md py-2 px-4">
+                        <a>Nao Agendar</a>
                       </button>
                     </div>
                     <div className="relative">
-                      <select className="h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500 rounded-lg">
-                        <option>Filtro</option>
-                        <option>Limpeza de Pele</option>
-                        <option>Preenchimento Labial</option>
+                      <select
+                        className="h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500 rounded-lg"
+                        value={filtro}
+                        onChange={handleFiltroChange}
+                      >
+                        <option value="">Todos os Serviços</option>
+                        {servicos.map((servico) => (
+                          <option key={servico.id} value={servico.nomeServico}>
+                            {servico.nomeServico}
+                          </option>
+                        ))}
                       </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 rounded-lg">
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center ml-4 px-2 text-gray-700 rounded-lg">
                         <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                           <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                         </svg>
@@ -77,7 +137,7 @@ export default function Dashboard({ informacoes }) {
                           </tr>
                         </thead>
                         <tbody>
-                          {informacoes.map((agendamento) => (
+                          {itensFiltrados.map((agendamento) => (
                             <tr key={agendamento.id}>
                               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <div className="flex items-center">
@@ -123,6 +183,20 @@ export default function Dashboard({ informacoes }) {
                           ))}
                         </tbody>
                       </table>
+                      
+                    </div>
+                    
+                  </div>
+                  <div className='absolute top-3/4 right-32'>
+                  <div className="flex items-center justify-end">
+                      <button onClick={goPrevPage}>&lt;</button>
+                        {Array.from(Array(pages), (index) => (
+                          <button key={index} onClick={() => goToPage(index)} ></button>
+                        ))}
+                        <span>
+                        {currentPage + 1}/{pages}
+                      </span>
+                      <button onClick={goNextPage}>&gt;</button>
                     </div>
                   </div>
                 </div>
@@ -130,7 +204,6 @@ export default function Dashboard({ informacoes }) {
             </div>
           </div>
         </div>
-
       </div>
     </>
 
@@ -139,25 +212,18 @@ export default function Dashboard({ informacoes }) {
 
 export async function getServerSideProps() {
   try {
-    const response = await axios.get('http://localhost:8080/informacoes');
-    const informacoes = response.data;
-
+    const response = await axios.get('http://localhost:8080/servicos');
+    const servicos = response.data;
     return {
-      props: {
-        informacoes,
-      },
+      props: { servicos },
     };
   } catch (error) {
-    console.error('Erro ao obter informações:', error);
-
+    console.error('Erro ao buscar os serviços:', error);
     return {
-      props: {
-        informacoes: [],
-      },
+      props: { servicos: [] },
     };
   }
 }
-
 
 
 

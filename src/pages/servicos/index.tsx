@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import axios from 'axios'
 //React
-import { useContext, FormEvent, useState } from 'react';
+import { useContext, FormEvent, useState, useEffect } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 // Imagem
 import Img from '../../../public/imglogincfit.png';
@@ -17,17 +17,47 @@ import Sidebar from '../../components/menu/sidebar';
 import Top from '../../components/top/servico/top';
 
 
-export default function Dashboard({ servicos }) {
+export default function Dashboard({servicos}) {
+  const [itens, setItens] = useState([])
+  const [itensPerPage, setItensPerPage] = useState(4)
+  const [currentPage, setCurrentPage] = useState(0)
+
+  const pages = Math.ceil(itens.length / itensPerPage)
+  const startIndex = currentPage * itensPerPage;
+  const endIndex = startIndex + itensPerPage;
+  const currentItens = itens.slice(startIndex, endIndex)
+
+  useEffect(()=>{
+    const fechData = async () => {
+      const result = await fetch('http://localhost:8080/servicos')
+        .then(response => response.json())
+        .then(data => data)
+      setItens(result)
+    }
+    fechData()
+  }, [])
+  const goToPage = (page) => {
+    setCurrentPage(page);
+  };
+
+  const goPrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+  };
+
+  const goNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, pages - 1));
+  };
+
   return (
     <>
       <Head>
         <title>Serviços - Clinica Cfit</title>
       </Head>
       <div className='flex'>
-        <Sidebar />
+        <Sidebar/>
         <div className='flex-col w-full'>
           <Top />
-          <div>
+          <div className="container mx-auto px-2 sm:px-8 ">
             <div>
               <button type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md mt-10 py-2 px-4">
                 <a>Cadastrar </a>
@@ -53,6 +83,18 @@ export default function Dashboard({ servicos }) {
               ))}
             </div>
           </div>
+          <div className='absolute top-3/4 right-32'>
+                  <div className="flex items-center justify-end">
+                      <button onClick={goPrevPage}>&lt;</button>
+                        {Array.from(Array(pages), (index) => (
+                          <button key={index} onClick={() => goToPage(index)} ></button>
+                        ))}
+                        <span>
+                        {currentPage + 1}/{pages}
+                      </span>
+                      <button onClick={goNextPage}>&gt;</button>
+                    </div>
+                  </div>
         </div>
       </div>
     </>

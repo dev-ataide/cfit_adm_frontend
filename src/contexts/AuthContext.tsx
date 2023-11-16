@@ -48,6 +48,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         email: email,
         senha: password,
       });
+      console.log('Usuário logado:', user);
 
       // Se as credenciais são válidas, você pode prosseguir com o login
       const { id, name, token } = response.data;
