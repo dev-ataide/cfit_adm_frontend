@@ -21,51 +21,51 @@ import axios from 'axios'
 
 
 
-export default function Dashboard({servicos}) {
-    const [openModal, setOpenModal] = useState(false)
+export default function Dashboard({ servicos }) {
+  const [openModal, setOpenModal] = useState(false)
 
-    const [itens, setItens] = useState([])
-    const [itensPerPage, setItensPerPage] = useState(5)
-    const [currentPage, setCurrentPage] = useState(0)
+  const [itens, setItens] = useState([])
+  const [itensPerPage, setItensPerPage] = useState(5)
+  const [currentPage, setCurrentPage] = useState(0)
 
-    const pages = Math.ceil(itens.length / itensPerPage)
-    const startIndex = currentPage * itensPerPage;
-    const endIndex = startIndex + itensPerPage;
-    const currentItens = itens.slice(startIndex, endIndex)
-    const [filtro, setFiltro] = useState(''); // Estado para armazenar o valor selecionado no filtro
+  const pages = Math.ceil(itens.length / itensPerPage)
+  const startIndex = currentPage * itensPerPage;
+  const endIndex = startIndex + itensPerPage;
+  const currentItens = itens.slice(startIndex, endIndex)
+  const [filtro, setFiltro] = useState(''); // Estado para armazenar o valor selecionado no filtro
 
-    // Função para lidar com a mudança no valor do filtro
-    const handleFiltroChange = (event) => {
-      setFiltro(event.target.value);
-    };
-  
-    // Filtrar os itens com base no valor do filtro
-    const itensFiltrados = currentItens.filter((agendamento) => {
-      if (filtro === '' || agendamento.Servico.nomeServico === filtro) {
-        return true;
-      }
-      return false;
-    });
-    useEffect(()=>{
-      const fechData = async () => {
-        const result = await fetch('http://localhost:8080/informacoes')
-          .then(response => response.json())
-          .then(data => data)
-        setItens(result)
-      }
-      fechData()
-    }, [])
-    const goToPage = (page) => {
-      setCurrentPage(page);
-    };
-  
-    const goPrevPage = () => {
-      setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
-    };
-  
-    const goNextPage = () => {
-      setCurrentPage((prevPage) => Math.min(prevPage + 1, pages - 1));
-    };
+  // Função para lidar com a mudança no valor do filtro
+  const handleFiltroChange = (event) => {
+    setFiltro(event.target.value);
+  };
+
+  // Filtrar os itens com base no valor do filtro
+  const itensFiltrados = currentItens.filter((agendamento) => {
+    if (filtro === '' || agendamento.Servico.nomeServico === filtro) {
+      return true;
+    }
+    return false;
+  });
+  useEffect(() => {
+    const fechData = async () => {
+      const result = await fetch('http://localhost:8080/informacoes')
+        .then(response => response.json())
+        .then(data => data)
+      setItens(result)
+    }
+    fechData()
+  }, [])
+  const goToPage = (page) => {
+    setCurrentPage(page);
+  };
+
+  const goPrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+  };
+
+  const goNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, pages - 1));
+  };
 
   return (
     <>
@@ -78,13 +78,13 @@ export default function Dashboard({servicos}) {
           <Top />
           <div>
             <div className="antialiased font-sans">
-              <div className="container mx-auto px-4 sm:px-8 "> 
+              <div className="container mx-auto px-4 sm:px-8 ">
                 <div className="py-8  overflow-x-hidden overflow-y-hidden">
                   <div className="my-2 flex items-center justify-between text-black">
-                  <Agendar isOpen={openModal} setModalOpen={()=> setOpenModal(!openModal)} servicos={servicos}></Agendar>
+                    <Agendar isOpen={openModal} setModalOpen={() => setOpenModal(!openModal)} servicos={servicos}></Agendar>
 
                     <div>
-                      <button onClick={()=>setOpenModal(true)} type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md py-2 px-4">
+                      <button onClick={() => setOpenModal(true)} type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md py-2 px-4">
                         <a>Agendar</a>
                       </button>
                     </div>
@@ -161,12 +161,24 @@ export default function Dashboard({servicos}) {
                               </td>
                               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <span
-                                  className={`relative inline-block px-3 py-1 font-semibold text-white leading-tight ${agendamento.StatusDeConsulta === 'Confirmado' ? 'bg-cfit_greenbuton' : 'bg-cfit_redbuton'}`}
+                                  className={`relative inline-block px-3 py-1 font-semibold text-white leading-tight ${agendamento.StatusDeConsulta === 'Realizada'
+                                      ? 'bg-green-500' // Cor verde para 'Realizada'
+                                      : agendamento.StatusDeConsulta === 'Pendente'
+                                        ? 'bg-yellow-500' // Cor amarela para 'Pendente'
+                                        : 'bg-red-500' // Cor vermelha para 'Cancelada'
+                                    }`}
                                 >
                                   <span aria-hidden className="absolute inset-0 opacity-50 rounded-md"></span>
-                                  <span className="relative">{agendamento.StatusDeConsulta === 'Confirmado' ? 'Sim' : 'Não'}</span>
+                                  <span className="relative">
+                                    {agendamento.StatusDeConsulta === 'Realizada'
+                                      ? 'Realizada' // Texto para o status 'Realizada'
+                                      : agendamento.StatusDeConsulta === 'Pendente'
+                                        ? 'Pendente' // Texto para o status 'Pendente'
+                                        : 'Cancelada'}{' '}
+                                  </span>
                                 </span>
                               </td>
+
                               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <svg className='ml-5' width="24" height="24" viewBox="0 0 16 16" fill="none">
                                   <rect x="1" y="1" width="14" height="14" rx="3" stroke="#D5D5D5" />
@@ -180,17 +192,17 @@ export default function Dashboard({servicos}) {
                           ))}
                         </tbody>
                       </table>
-                      
+
                     </div>
-                    
+
                   </div>
                   <div className='absolute top-3/4 right-32'>
-                  <div className="flex items-center justify-end">
+                    <div className="flex items-center justify-end">
                       <button onClick={goPrevPage}>&lt;</button>
-                        {Array.from(Array(pages), (index) => (
-                          <button key={index} onClick={() => goToPage(index)} ></button>
-                        ))}
-                        <span>
+                      {Array.from(Array(pages), (index) => (
+                        <button key={index} onClick={() => goToPage(index)} ></button>
+                      ))}
+                      <span>
                         {currentPage + 1}/{pages}
                       </span>
                       <button onClick={goNextPage}>&gt;</button>
