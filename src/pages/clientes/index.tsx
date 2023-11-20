@@ -32,11 +32,6 @@ export default function Dashboard() {
         <div className="container mx-auto px-4 sm:px-8 ">
           <div className="py-8  overflow-x-hidden overflow-y-hidden">
           <div className="my-2 flex items-center justify-between">
-            <div>
-              <button type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md py-2 px-4">
-                <a>Cadastrar</a>
-              </button>
-            </div>
           
           </div>
             <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-hidden">

@@ -11,6 +11,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import Img from '../../../public/imglogincfit.png';
 
 // Icones
+import CriarServico from '../../components/modals/servicos/servico';
 
 //Components
 import Sidebar from '../../components/menu/sidebar';
@@ -18,6 +19,8 @@ import Top from '../../components/top/servico/top';
 
 
 export default function Dashboard({servicos}) {
+  const [openModal, setOpenModal] = useState(false)
+
   const [itens, setItens] = useState([])
   const [itensPerPage, setItensPerPage] = useState(4)
   const [currentPage, setCurrentPage] = useState(0)
@@ -59,7 +62,9 @@ export default function Dashboard({servicos}) {
           <Top />
           <div className="container mx-auto px-2 sm:px-8 ">
             <div>
-              <button type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md mt-10 py-2 px-4">
+            <CriarServico isOpen={openModal} setModalOpen={()=> setOpenModal(!openModal)}></CriarServico>
+
+              <button onClick={()=>setOpenModal(true)} type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md mt-10 py-2 px-4">
                 <a>Cadastrar </a>
               </button>
             </div>

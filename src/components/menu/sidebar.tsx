@@ -31,7 +31,7 @@ console.log(user)
                   Administrador
                 </h2>
                 <p className="text-xs text-black text-left ml-2">
-                  {user.email} {/* Use o email do usuário do contexto */}
+                  {/* {user.email} Use o email do usuário do contexto */}
                 </p>
               </div>
             </div>

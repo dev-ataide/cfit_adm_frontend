@@ -78,17 +78,14 @@ export default function Dashboard({servicos}) {
           <Top />
           <div>
             <div className="antialiased font-sans">
-              <div className="container mx-auto px-4 sm:px-8 ">
+              <div className="container mx-auto px-4 sm:px-8 "> 
                 <div className="py-8  overflow-x-hidden overflow-y-hidden">
                   <div className="my-2 flex items-center justify-between text-black">
-                  <Agendar isOpen={openModal}/>
+                  <Agendar isOpen={openModal} setModalOpen={()=> setOpenModal(!openModal)} servicos={servicos}></Agendar>
 
                     <div>
                       <button onClick={()=>setOpenModal(true)} type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md py-2 px-4">
                         <a>Agendar</a>
-                      </button>
-                      <button onClick={()=>setOpenModal(false)} type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md py-2 px-4">
-                        <a>Nao Agendar</a>
                       </button>
                     </div>
                     <div className="relative">
