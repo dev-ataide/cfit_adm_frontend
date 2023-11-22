@@ -1,44 +1,39 @@
 // Nativo do next
 import Head from 'next/head';
-
 import Image from 'next/image';
 import Link from 'next/link';
-import axios from 'axios'
-//React
+import axios from 'axios';
 import { useContext, FormEvent, useState, useEffect } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
-// Imagem
 import Img from '../../../public/imglogincfit.png';
-
-// Icones
 import CriarServico from '../../components/modals/servicos/servico';
-
-//Components
 import Sidebar from '../../components/menu/sidebar';
 import Top from '../../components/top/servico/top';
 
+export default function ServicosDashboard({ servicos }) {
+  const [openModal, setOpenModal] = useState(false);
+  const [itens, setItens] = useState([]);
+  const [itensPerPage, setItensPerPage] = useState(4);
+  const [currentPage, setCurrentPage] = useState(0);
 
-export default function Dashboard({servicos}) {
-  const [openModal, setOpenModal] = useState(false)
-
-  const [itens, setItens] = useState([])
-  const [itensPerPage, setItensPerPage] = useState(4)
-  const [currentPage, setCurrentPage] = useState(0)
-
-  const pages = Math.ceil(itens.length / itensPerPage)
+  const pages = Math.ceil(itens.length / itensPerPage);
   const startIndex = currentPage * itensPerPage;
   const endIndex = startIndex + itensPerPage;
-  const currentItens = itens.slice(startIndex, endIndex)
+  const currentItens = itens.slice(startIndex, endIndex);
 
-  useEffect(()=>{
-    const fechData = async () => {
-      const result = await fetch('http://localhost:8080/servicos')
-        .then(response => response.json())
-        .then(data => data)
-      setItens(result)
-    }
-    fechData()
-  }, [])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/servicos');
+        setItens(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar os serviços:', error);
+        setItens([]);
+      }
+    };
+    fetchData();
+  }, []);
+
   const goToPage = (page) => {
     setCurrentPage(page);
   };
@@ -57,23 +52,22 @@ export default function Dashboard({servicos}) {
         <title>Serviços - Clinica Cfit</title>
       </Head>
       <div className='flex'>
-        <Sidebar/>
+        <Sidebar />
         <div className='flex-col w-full'>
           <Top />
           <div className="container mx-auto px-2 sm:px-8 ">
             <div>
-            <CriarServico isOpen={openModal} setModalOpen={()=> setOpenModal(!openModal)}></CriarServico>
-
-              <button onClick={()=>setOpenModal(true)} type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md mt-10 py-2 px-4">
+              <CriarServico isOpen={openModal} setModalOpen={() => setOpenModal(!openModal)}></CriarServico>
+              <button onClick={() => setOpenModal(true)} type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md mt-10 py-2 px-4">
                 <a>Cadastrar </a>
               </button>
             </div>
 
             <div className="px-10 py-20 grid gap-10 lg:grid-cols-3 xl:grid-cols-4 sm:grid-cols-2">
-              {servicos.map((servico) => (
+              {currentItens.map((servico) => (
                 <div key={servico.id} className="max-w-xs rounded-md overflow-hidden shadow-lg hover:scale-105 transition duration-500 cursor-pointer">
                   <div>
-                  <img src="https://tse2.mm.bing.net/th?id=OIP.opw0yyddkARDeIClVsmBWgHaE8&pid=Api&P=0&h=180" alt="" />
+                    <img src="https://tse2.mm.bing.net/th?id=OIP.opw0yyddkARDeIClVsmBWgHaE8&pid=Api&P=0&h=180" alt="" />
                   </div>
                   <div className="py-4 px-4 bg-white">
                     <h3 className="text-md font-semibold text-gray-600">{servico.nomeServico}</h3>
@@ -87,19 +81,21 @@ export default function Dashboard({servicos}) {
                 </div>
               ))}
             </div>
+
+            <div className='absolute top-3/4 right-32'>
+              <div className="flex items-center justify-end">
+                <button onClick={goPrevPage}>&lt;</button>
+                {Array.from(Array(pages), (index) => (
+                  <button key={index} onClick={() => goToPage(index)}></button>
+                ))}
+                <span>
+                  {currentPage + 1}/{pages}
+                </span>
+                <button onClick={goNextPage}>&gt;</button>
+              </div>
+            </div>
+          
           </div>
-          <div className='absolute top-3/4 right-32'>
-                  <div className="flex items-center justify-end">
-                      <button onClick={goPrevPage}>&lt;</button>
-                        {Array.from(Array(pages), (index) => (
-                          <button key={index} onClick={() => goToPage(index)} ></button>
-                        ))}
-                        <span>
-                        {currentPage + 1}/{pages}
-                      </span>
-                      <button onClick={goNextPage}>&gt;</button>
-                    </div>
-                  </div>
         </div>
       </div>
     </>

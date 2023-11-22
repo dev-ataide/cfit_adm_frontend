@@ -32,6 +32,7 @@ export default function Dashboard({ servicos }) {
   const startIndex = currentPage * itensPerPage;
   const endIndex = startIndex + itensPerPage;
   const currentItens = itens.slice(startIndex, endIndex)
+
   const [filtro, setFiltro] = useState(''); // Estado para armazenar o valor selecionado no filtro
 
   // Função para lidar com a mudança no valor do filtro
@@ -46,6 +47,7 @@ export default function Dashboard({ servicos }) {
     }
     return false;
   });
+  
   useEffect(() => {
     const fechData = async () => {
       const result = await fetch('http://localhost:8080/informacoes')
