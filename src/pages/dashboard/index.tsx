@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 
 // Modal
 import Agendar from '../../components/modals/agendar/agendar';
+import DetailAppointment from '../../components/modals/detailAppointment/detailappointment';
 
 //Components
 import Sidebar from '../../components/menu/sidebar';
@@ -21,8 +22,9 @@ import axios from 'axios'
 
 
 
-export default function Dashboard({ servicos }) {
+export default function Dashboard({ servicos, appointmentId }) {
   const [openModal, setOpenModal] = useState(false)
+  const [openModalAppointmente, setOpenModalAppointment] = useState(false)
 
   const [itens, setItens] = useState([])
   const [itensPerPage, setItensPerPage] = useState(5)
@@ -47,7 +49,7 @@ export default function Dashboard({ servicos }) {
     }
     return false;
   });
-  
+
   useEffect(() => {
     const fechData = async () => {
       const result = await fetch('http://localhost:8080/informacoes')
@@ -84,12 +86,16 @@ export default function Dashboard({ servicos }) {
                 <div className="py-8  overflow-x-hidden overflow-y-hidden">
                   <div className="my-2 flex items-center justify-between text-black">
                     <Agendar isOpen={openModal} setModalOpen={() => setOpenModal(!openModal)} servicos={servicos}></Agendar>
-
                     <div>
                       <button onClick={() => setOpenModal(true)} type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md py-2 px-4">
                         <a>Agendar</a>
                       </button>
                     </div>
+                    <DetailAppointment isOpen={openModalAppointmente} setModalOpen={() => setOpenModal(!openModalAppointmente)} appointmentId={appointmentId}></DetailAppointment>
+                    <button onClick={() => setOpenModalAppointment(true)} type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md py-2 px-4">
+                      detalhes
+                    </button>
+
                     <div className="relative">
                       <select
                         className="h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500 rounded-lg"
@@ -164,10 +170,10 @@ export default function Dashboard({ servicos }) {
                               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <span
                                   className={`relative inline-block px-3 py-1 font-semibold text-white leading-tight ${agendamento.StatusDeConsulta === 'Realizada'
-                                      ? 'bg-green-500' // Cor verde para 'Realizada'
-                                      : agendamento.StatusDeConsulta === 'Pendente'
-                                        ? 'bg-yellow-500' // Cor amarela para 'Pendente'
-                                        : 'bg-red-500' // Cor vermelha para 'Cancelada'
+                                    ? 'bg-green-500' // Cor verde para 'Realizada'
+                                    : agendamento.StatusDeConsulta === 'Pendente'
+                                      ? 'bg-yellow-500' // Cor amarela para 'Pendente'
+                                      : 'bg-red-500' // Cor vermelha para 'Cancelada'
                                     }`}
                                 >
                                   <span aria-hidden className="absolute inset-0 opacity-50 rounded-md"></span>

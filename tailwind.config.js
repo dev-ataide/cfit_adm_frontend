@@ -18,7 +18,8 @@ module.exports = {
         cfit_greenbuton : '#2ED47A',
         cfit_redbuton : '#FF0010',
         cfit_gray: '#C2CFE0',
-        cfit_modals : '#fff'
+        cfit_modals : '#fff',
+        cfit_bgmodal: '#E5E5E5'
       },
     },
   },

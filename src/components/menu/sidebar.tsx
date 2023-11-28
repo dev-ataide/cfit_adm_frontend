@@ -3,11 +3,9 @@ import { useContext } from 'react';
 import Image from 'next/image';
 import Img from '../../../public/avatarfigma.png';
 import Link from 'next/link';
-import { useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext'; // Importe o AuthContext
 
 const Sidebar = () => {
-  const [sidenav, setSidenav] = useState(true);
   const { user } = useContext(AuthContext); // Consuma o contexto AuthContext
 console.log(user)
 
@@ -16,12 +14,10 @@ console.log(user)
       <div
         id="view"
         className="h-full w-auto flex flex-row"
-        x-data="{ sidenav: true }"
       >
         <div
           id="sidebar"
           className="bg-white h-screen md:block shadow-xl px-3 w-30 md:w-60 lg:w-60 overflow-x-hidden transition-transform duration-300 ease-in-out"
-          x-show="sidenav"
         >
           <div className="space-y-6 md:space-y-5 mt-10">
             <div id="profile" className="space-y-2 flex ml-2">

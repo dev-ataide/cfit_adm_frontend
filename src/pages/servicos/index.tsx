@@ -102,6 +102,7 @@ export default function ServicosDashboard({ servicos }) {
   );
 }
 
+
 export async function getServerSideProps() {
   try {
     const response = await axios.get('http://localhost:8080/servicos');
