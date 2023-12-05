@@ -76,11 +76,11 @@ export default function Dashboard({ servicos, appointmentId }) {
       <Head>
         <title>Agendamentos - Clinica Cfit</title>
       </Head>
-      <div className='flex'>
+       <div className='flex'>
         <Sidebar />
         <div className='flex-col w-full'>
           <Top />
-          <div>
+          <div> 
             <div className="antialiased font-sans">
               <div className="container mx-auto px-4 sm:px-8 ">
                 <div className="py-8  overflow-x-hidden overflow-y-hidden">
@@ -91,10 +91,8 @@ export default function Dashboard({ servicos, appointmentId }) {
                         <a>Agendar</a>
                       </button>
                     </div>
-                    <DetailAppointment isOpen={openModalAppointmente} setModalOpen={() => setOpenModal(!openModalAppointmente)} appointmentId={appointmentId}></DetailAppointment>
-                    <button onClick={() => setOpenModalAppointment(true)} type="submit" className="bg-cfit_purple hover:bg-cfit_purpledark text-white font-semibold rounded-md py-2 px-4">
-                      detalhes
-                    </button>
+                    <DetailAppointment isOpen={openModalAppointmente} setOpenModalAppointment={() => setOpenModalAppointment(!openModalAppointmente)} appointmentId={appointmentId}></DetailAppointment>
+                   
 
                     <div className="relative">
                       <select
@@ -188,6 +186,7 @@ export default function Dashboard({ servicos, appointmentId }) {
                               </td>
 
                               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                              <button onClick={() => setOpenModalAppointment(true)} type="submit">
                                 <svg className='ml-5' width="24" height="24" viewBox="0 0 16 16" fill="none">
                                   <rect x="1" y="1" width="14" height="14" rx="3" stroke="#D5D5D5" />
                                   <path
@@ -195,6 +194,8 @@ export default function Dashboard({ servicos, appointmentId }) {
                                     fill="#D5D5D5"
                                   />
                                 </svg>
+                                </button>
+
                               </td>
                             </tr>
                           ))}
